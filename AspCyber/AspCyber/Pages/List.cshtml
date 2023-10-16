@@ -1,0 +1,18 @@
+﻿@page
+@model ListModel
+
+
+@foreach (var item in Model.model)
+{
+    <div>
+        <div>Email: @item.UserEmail</div>
+        <ul>
+            @foreach (var role in item.Roles)
+            {
+                <li>Role: @role</li>
+            }
+        </ul>
+        <button>Dupa </button>
+    </div>
+
+}
