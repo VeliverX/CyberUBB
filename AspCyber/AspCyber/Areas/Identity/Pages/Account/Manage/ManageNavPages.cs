@@ -23,6 +23,8 @@ namespace  AspCyber.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        public static string ListOfUsers => "ListOfUsers";
+        /// 
         public static string Email => "Email";
 
         /// <summary>
@@ -71,6 +73,10 @@ namespace  AspCyber.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        public static string ListOfUsersNavClass(ViewContext viewContext) => PageNavClass(viewContext, ListOfUsers);
+
+
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 
         /// <summary>
