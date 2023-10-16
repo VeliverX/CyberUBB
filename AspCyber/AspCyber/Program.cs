@@ -67,18 +67,32 @@ public class Program
         using (var scope = app.Services.CreateScope())
         {
             var userMeneger = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            string email = "admin@admin.com";
-            string password = "Haslo123!";
+            //Admin
+            string emailAdmin = "admin@admin.com";
+            string passwordAdmin = "Haslo123!";
+            //User
+            string emailUser = "user@user.com";
+            string passwordUser = "Haslo123!";
 
-            if(await userMeneger.FindByEmailAsync(email) == null)
+            if(await userMeneger.FindByEmailAsync(emailAdmin) == null)
             {
                 var user = new IdentityUser();
-                user.Email = email;
-                user.UserName = email;
+                user.Email = emailAdmin;
+                user.UserName = emailAdmin;
 
-                await userMeneger.CreateAsync(user, password);
+                await userMeneger.CreateAsync(user, passwordAdmin);
 
                 await userMeneger.AddToRoleAsync(user, "Admin");
+            }
+            if (await userMeneger.FindByEmailAsync(emailUser) == null)
+            {
+                var user = new IdentityUser();
+                user.Email = emailUser;
+                user.UserName = emailUser;
+
+                await userMeneger.CreateAsync(user, passwordUser);
+
+                await userMeneger.AddToRoleAsync(user, "User");
             }
         }
         app.Run();
