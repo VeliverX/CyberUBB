@@ -43,5 +43,81 @@ namespace AspCyber.Pages
             return Page();
         
         }
+        [HttpPost]
+        public async Task<IActionResult> OnPostDeleteUser(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToPage("List");
+                }
+                else
+                {
+                    
+                     return Page();
+                }
+            }
+            return Page();
+
+            //return RedirectToPage("List");
+        }
+        [HttpPost]
+
+        public async Task<IActionResult> OnPostLockUser(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                
+                user.LockoutEnd = DateTime.Now.AddDays(7);
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    
+                    return RedirectToPage("List"); 
+                }
+                else
+                {
+                    
+                    return Page();
+                }
+            }
+
+            
+            return RedirectToPage("List");
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> OnPostUnlock(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+
+                user.LockoutEnd = DateTime.Now;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+
+                    return RedirectToPage("List");
+                }
+                else
+                {
+
+                    return Page();
+                }
+            }
+
+
+            return RedirectToPage("List");
+        }
     }
 }

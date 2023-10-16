@@ -10,9 +10,26 @@
             @foreach (var role in item.Roles)
             {
                 <li>Role: @role</li>
+
             }
         </ul>
-        <button>Dupa </button>
+        <div>
+            <form method="post" asp-page-handler="DeleteUser" asp-route-email="@item.UserEmail">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        <div>
+            <form method="post" asp-page-handler="LockUser" asp-route-email="@item.UserEmail">
+                <button type="submit">Lock 7 Days</button>
+            </form>
+        </div>
+        <div>
+            <form method="post" asp-page-handler="Unlock" asp-route-email="@item.UserEmail">
+                <button type="submit">Unlock</button>
+            </form>
+        </div>
+       
+
     </div>
 
 }

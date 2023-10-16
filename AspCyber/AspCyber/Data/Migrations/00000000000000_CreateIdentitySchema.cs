@@ -39,7 +39,7 @@ namespace AspCyber.Data.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
