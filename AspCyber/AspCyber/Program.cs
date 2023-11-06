@@ -12,25 +12,28 @@ public class Program
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
         builder.Services.AddRazorPages();
 
         
-            builder.Services.Configure<IdentityOptions>(options =>
-            {
-                //Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequiredUniqueChars = 1;
-            });
-        
-        
-        
+
+
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+          //Password settings.
+          options.Password.RequireDigit = true;
+          options.Password.RequireLowercase = false;
+          options.Password.RequireNonAlphanumeric = true;
+          options.Password.RequireUppercase = true;
+          options.Password.RequiredLength = 8;
+          options.Password.RequiredUniqueChars = 1;
+        });
+
+       
+
+
 
         var app = builder.Build();
 
@@ -48,11 +51,12 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-
+        
         app.UseRouting();
 
         app.UseAuthorization();
-
+        ;
+        ;
         app.MapRazorPages();
         using (var scope = app.Services.CreateScope())
         {
