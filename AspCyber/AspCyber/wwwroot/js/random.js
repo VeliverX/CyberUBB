@@ -1,13 +1,13 @@
 document.getElementById("generatePasswordBtn").addEventListener("click", function () {
-    console.log("Przycisk zosta³ klikniêty");
-    fetch("/Identity/Account/Register?handler=GeneratePassword", {
-        method: "POST"
-    })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("GeneratedPassword").value = data;
-        })
-        .catch(error => {
-            console.error("B³¹d:", error);
-        });
+    var email = document.getElementById("email").value;
+    var emailLength = email.length;
+    var randomX = Math.random() / 4;
+    var result = Math.exp( -emailLength * randomX).toFixed(15);
+    document.getElementById("generatedPassword").value = result;
+    document.getElementById("generatedPasswordx").value = randomX;
+
+    // Logowanie do konsoli
+    console.log("Email Length:", -emailLength );
+    console.log("Random X:", randomX);
+    console.log("Generated Password:", result);
 });

@@ -13,7 +13,7 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <input id="email" asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
@@ -35,9 +35,13 @@
 
             <form method="post">
                 <div class="form-floating mb-3">
-                    <input asp-for="GeneratedPassword" class="form-control" aria-required="true" placeholder="generated password" readonly />
-                    <label asp-for="GeneratedPassword">Generated Password</label>
+                <input id="generatedPassword" asp-for="Input.RandomPassword" class="form-control" aria-required="true" placeholder="generated password" readonly />
+                <label asp-for="Input.RandomPassword">Generated Password</label>
                 </div>
+            <div class="form-floating mb-3">
+                <input id="generatedPasswordx" asp-for="Input.RandomPassword" class="form-control" aria-required="true" placeholder="Random X " readonly />
+                <label asp-for="Input.RandomPassword">X range 0 : 0.25</label>
+            </div>
             </form>
         <button id="generatePasswordBtn" type="button" class="w-100 btn btn-lg btn-primary">Generate Password</button>
     </div>
