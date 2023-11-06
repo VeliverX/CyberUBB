@@ -58,7 +58,7 @@ public class Program
         {
             var roleMeneger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var roles = new[] { "Admin", "User" };
+            var roles = new[] { "Admin", "User", "Guest", "Moderator", "Owner" };
 
             foreach (var role in roles)
             {
@@ -78,7 +78,16 @@ public class Program
             string emailUser = "user@user.com";
             string passwordUser = "Haslo123!";
 
-            if(await userMeneger.FindByEmailAsync(emailAdmin) == null)
+            string emailUser2 = "user2@user.com";
+            string passwordUser2 = "Haslo123!";
+
+            string emailUser3 = "user3@user.com";
+            string passwordUser3 = "Haslo123!";
+
+            string emailUser4 = "user4@user.com";
+            string passwordUser4 = "Haslo123!";
+
+            if (await userMeneger.FindByEmailAsync(emailAdmin) == null)
             {
                 var user = new IdentityUser();
                 user.Email = emailAdmin;
@@ -95,6 +104,36 @@ public class Program
                 user.UserName = emailUser;
 
                 await userMeneger.CreateAsync(user, passwordUser);
+
+                await userMeneger.AddToRoleAsync(user, "User");
+            }
+            if (await userMeneger.FindByEmailAsync(emailUser2) == null)
+            {
+                var user = new IdentityUser();
+                user.Email = emailUser2;
+                user.UserName = emailUser2;
+
+                await userMeneger.CreateAsync(user, passwordUser2);
+
+                await userMeneger.AddToRoleAsync(user, "User");
+            }
+            if (await userMeneger.FindByEmailAsync(emailUser3) == null)
+            {
+                var user = new IdentityUser();
+                user.Email = emailUser3;
+                user.UserName = emailUser3;
+
+                await userMeneger.CreateAsync(user, passwordUser3);
+
+                await userMeneger.AddToRoleAsync(user, "User");
+            }
+            if (await userMeneger.FindByEmailAsync(emailUser4) == null)
+            {
+                var user = new IdentityUser();
+                user.Email = emailUser4;
+                user.UserName = emailUser4;
+
+                await userMeneger.CreateAsync(user, passwordUser4);
 
                 await userMeneger.AddToRoleAsync(user, "User");
             }
