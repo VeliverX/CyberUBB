@@ -4,10 +4,12 @@
 
 using System;
 using System.Threading.Tasks;
+using AspCyber.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AspCyber.Areas.Identity.Pages.Account
@@ -16,17 +18,27 @@ namespace AspCyber.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, ApplicationDbContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context; 
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            var userLog = new UserLog
+            {
+                UserName = User.Identity.Name,
+                Timestamp = DateTime.UtcNow,
+                Action = "Logged Out"
+            };
+            _context.UserLogs.Add(userLog);
+            await _context.SaveChangesAsync();
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

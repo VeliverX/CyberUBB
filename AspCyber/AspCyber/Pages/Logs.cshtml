@@ -1,8 +1,7 @@
 ﻿@page
-@using AspCyber.Data.Models;
 @model LogsModel
 @{
-    ViewData["Title"] = "Log List";
+    ViewData["Title"] = "User Logs";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -11,17 +10,17 @@
     <thead>
         <tr>
             <th>User Name</th>
-            <th>Description</th>
-            <th>Time</th>
+            <th>Action</th>
+            <th>Timestamp</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var log in (List<LogViewModel>)ViewData["Logs"])
+        @foreach (var log in Model.UserLogs)
         {
             <tr>
-                <td>@log.UserNameModel</td>
-                <td>@log.Description</td>
-                <td>@log.Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@log.UserName</td>
+                <td>@log.Action</td>
+                <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
             </tr>
         }
     </tbody>
