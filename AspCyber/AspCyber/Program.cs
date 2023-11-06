@@ -1,4 +1,6 @@
 using AspCyber.Data;
+using AspCyber.Data.Models;
+using AspCyber.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 public class Program
@@ -14,6 +16,8 @@ public class Program
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+        builder.Services.AddScoped<LogsModel>();
+        builder.Services.AddScoped<List<LogViewModel>>();
 
         builder.Services.AddRazorPages();
 
