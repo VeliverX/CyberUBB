@@ -1,3 +1,4 @@
+using AspCyber.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace AspCyber.Pages
     [Authorize(Roles = "Admin")]
     public class ListModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         public class UserRoleView
         {
             public string UserEmail { get; set; }
@@ -20,9 +22,10 @@ namespace AspCyber.Pages
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ListModel(UserManager<IdentityUser> userManager)
+        public ListModel(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _userManager =  userManager;
+            _context = context;
         }
 
        
@@ -50,6 +53,15 @@ namespace AspCyber.Pages
             if (user != null)
             {
                 var result = await _userManager.DeleteAsync(user);
+                var userLog = new UserLog
+                {
+                    UserName = User.Identity.Name,
+                    Timestamp = DateTime.Now,
+                    Action = "Delete user" + " " + user.Email,
+                };
+                _context.UserLogs.Add(userLog);
+                await _context.SaveChangesAsync();
+
                 if (result.Succeeded)
                 {
                     return RedirectToPage("List");

@@ -34,7 +34,7 @@ namespace AspCyber.Areas.Identity.Pages.Account
             var userLog = new UserLog
             {
                 UserName = User.Identity.Name,
-                Timestamp = DateTime.UtcNow,
+                Timestamp = DateTime.Now,
                 Action = "Logged Out"
             };
             _context.UserLogs.Add(userLog);

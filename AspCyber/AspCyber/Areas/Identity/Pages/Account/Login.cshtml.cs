@@ -86,7 +86,7 @@ namespace AspCyber.Areas.Identity.Pages.Account
                     var userLog = new UserLog
                     {
                         UserName = Input.Email,
-                        Timestamp = DateTime.UtcNow,
+                        Timestamp = DateTime.Now,
                         Action = "Logged In"
                     };
                     _context.UserLogs.Add(userLog);
