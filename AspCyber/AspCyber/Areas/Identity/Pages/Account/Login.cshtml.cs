@@ -1,5 +1,4 @@
-﻿
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -73,6 +72,7 @@ namespace AspCyber.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // This counts login failures towards account lockout
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
@@ -98,6 +98,8 @@ namespace AspCyber.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
+
+            // If we got this far, something failed, redisplay form
             return Page();
         }
     }
