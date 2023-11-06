@@ -6,7 +6,8 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+    
+        
         // Add services to the container.
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,8 +18,14 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddRazorPages();
 
-        
-            builder.Services.Configure<IdentityOptions>(options =>
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(20);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+        });
+
+        builder.Services.Configure<IdentityOptions>(options =>
             {
                 //Password settings.
                 options.Password.RequireDigit = true;
@@ -28,9 +35,9 @@ public class Program
                 options.Password.RequiredLength = 8;
                 options.Password.RequiredUniqueChars = 1;
             });
+
         
-        
-        
+
 
         var app = builder.Build();
 
