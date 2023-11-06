@@ -17,7 +17,13 @@ public class Program
 
         builder.Services.AddRazorPages();
 
-        
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(15);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+        });
+
 
 
         builder.Services.Configure<IdentityOptions>(options =>
