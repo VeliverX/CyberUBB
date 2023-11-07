@@ -5,7 +5,7 @@ using AspCyber.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AspCyber.Data; // Zast¹p "YourNamespace" odpowiedni¹ przestrzeni¹ nazw
+using AspCyber.Data;
 
 namespace AspCyber.Pages
 {
