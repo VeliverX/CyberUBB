@@ -49,6 +49,11 @@ namespace AspCyber.Areas.Identity.Pages.Account
             public string Password { get; set; }
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            [Required]
+            [Display(Name = "Security Question Answer")]
+            public string SecurityQuestionAnswer { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -74,6 +79,12 @@ namespace AspCyber.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
+            if (Input.SecurityQuestionAnswer.ToLower() != "warszawa")
+            {
+                ModelState.AddModelError(string.Empty, "Odpowiedź jest niepoprawna!");
+                return Page();
+            }
 
             if (ModelState.IsValid)
             {

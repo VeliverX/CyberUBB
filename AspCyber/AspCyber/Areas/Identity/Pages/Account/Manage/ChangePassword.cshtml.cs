@@ -6,10 +6,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AspCyber.Data;
+using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+
+
 
 namespace AspCyber.Areas.Identity.Pages.Account.Manage
 {
@@ -19,17 +22,21 @@ namespace AspCyber.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly ICaptchaValidator _captchaValidator;
+
 
         public ChangePasswordModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<ChangePasswordModel> logger,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            ICaptchaValidator captchaValidator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _context = context;
+            _captchaValidator = captchaValidator;
         }
 
         /// <summary>
@@ -98,42 +105,48 @@ namespace AspCyber.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string captcha)
         {
-            if (!ModelState.IsValid)
+            if (await _captchaValidator.IsCaptchaPassedAsync(captcha))
             {
-                return Page();
+                ModelState.AddModelError("captcha", "Captcha validation failed");
+                
             }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            var userLog = new UserLog
-            {
-                UserName = User.Identity.Name,
-                Timestamp = DateTime.UtcNow,
-                Action = "Changed Password",
-            };
-            _context.UserLogs.Add(userLog);
-            await _context.SaveChangesAsync();
-            if (!changePasswordResult.Succeeded)
-            {
-                foreach (var error in changePasswordResult.Errors)
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 }
-                return Page();
+
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+                var userLog = new UserLog
+                {
+                    UserName = User.Identity.Name,
+                    Timestamp = DateTime.UtcNow,
+                    Action = "Changed Password",
+                };
+                _context.UserLogs.Add(userLog);
+                await _context.SaveChangesAsync();
+                if (!changePasswordResult.Succeeded)
+                {
+                    foreach (var error in changePasswordResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return Page();
+                }
+
+                await _signInManager.RefreshSignInAsync(user);
+                _logger.LogInformation("User changed their password successfully.");
+                StatusMessage = "Your password has been changed.";
+
+                return RedirectToPage();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+                return Page();
 
-            return RedirectToPage();
         }
     }
 }

@@ -1,5 +1,7 @@
 using AspCyber.Data;
 using AspCyber.Pages;
+using GoogleReCaptcha.V3.Interface;
+using GoogleReCaptcha.V3;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 public class Program
@@ -39,7 +41,9 @@ public class Program
           options.Password.RequiredUniqueChars = 1;
         });
 
-       
+        builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+
+
 
 
 
